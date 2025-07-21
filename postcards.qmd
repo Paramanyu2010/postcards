@@ -2,5 +2,14 @@
 title: "Voting and Postcards"
 author: "Paramanyu Gupta"
 format: html
+execute: 
+  echo: false
 ---
 
+```{r}
+#| message: false
+library(tidyverse)
+library(primer.data)
+```
+
+Understanding voter behavior is crucial for effective political engagement and democratic participation. This analysis utilizes data from Gerber, Green, and Larimer's (2008) large-scale field experiment to investigate the causal impact of different types of social pressure postcards on voter turnout in the 2006 primary election.
