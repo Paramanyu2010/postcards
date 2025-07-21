@@ -99,9 +99,146 @@ window.Quarto = {
 </header>
 
 
-<p>Understanding voter behavior is crucial for effective political engagement and democratic participation. This analysis utilizes data from Gerber, Green, and Larimer’s (2008) large-scale field experiment to investigate the causal impact of different types of social pressure postcards on voter turnout in the 2006 primary election.</p>
+<p>Understanding voter behavior is crucial for effective political engagement and democratic participation. This analysis utilizes data from Gerber, Green, and Larimer’s (2008) large-scale field experiment to investigate the causal impact of different types of social pressure postcards on voter turnout in the 2006 primary election. Furthermore, the generalizability of these findings may be limited as the experimental data was collected in 2006, and voter behavior and the political landscape have likely evolved significantly since then, potentially violating the assumption of stability.</p>
 <p><span class="math display">\[P(Y = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n)}}\]</span></p>
 <p>with <span class="math inline">\(Y \sim \text{Bernoulli}(\rho)\)</span> where <span class="math inline">\(\rho\)</span> is the probability above.</p>
+<p><span class="math display">\[
+\log\left(\frac{P(\text{voted}=1)}{1-P(\text{voted}=1)}\right) = -2.434 \\
++ 0.012 \cdot \text{age} + 0.036 \cdot \text{sexMale} \\
++ 0.086 \cdot \text{treatmentCivic Duty} + 0.071 \cdot \text{treatmentHawthorne} \\
++ 0.202 \cdot \text{treatmentSelf} + 0.359 \cdot \text{treatmentNeighbors} \\
++ 0.820 \cdot \text{voter\_classSometimes Vote} + 1.609 \cdot \text{voter\_classAlways Vote} \\
++ 0.031 \cdot (\text{treatmentCivic Duty} \cdot \text{voter\_classSometimes Vote}) \\
++ 0.059 \cdot (\text{treatmentHawthorne} \cdot \text{voter\_classSometimes Vote}) \\
++ 0.053 \cdot (\text{treatmentSelf} \cdot \text{voter\_classSometimes Vote}) \\
++ 0.041 \cdot (\text{treatmentNeighbors} \cdot \text{voter\_classSometimes Vote}) \\
+- 0.051 \cdot (\text{treatmentCivic Duty} \cdot \text{voter\_classAlways Vote}) \\
++ 0.063 \cdot (\text{treatmentHawthorne} \cdot \text{voter\_classAlways Vote}) \\
+- 0.006 \cdot (\text{treatmentSelf} \cdot \text{voter\_classAlways Vote}) \\
++ 0.006 \cdot (\text{treatmentNeighbors} \cdot \text{voter\_classAlways Vote})
+\]</span></p>
+<table class="caption-top table">
+<caption>Estimated Effects from Voting Model (Source: 2006 Michigan primary voting results. Estimates are on the log-odds scale. Confidence intervals are 95%.)</caption>
+<colgroup>
+<col style="width: 54%">
+<col style="width: 23%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: right;">Estimate (Log-Odds)</th>
+<th style="text-align: right;">Lower CI</th>
+<th style="text-align: right;">Upper CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-2.434</td>
+<td style="text-align: right;">-2.478</td>
+<td style="text-align: right;">-2.391</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">age</td>
+<td style="text-align: right;">0.012</td>
+<td style="text-align: right;">0.012</td>
+<td style="text-align: right;">0.013</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sexMale</td>
+<td style="text-align: right;">0.036</td>
+<td style="text-align: right;">0.021</td>
+<td style="text-align: right;">0.050</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">treatmentCivic Duty</td>
+<td style="text-align: right;">0.086</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.173</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">treatmentHawthorne</td>
+<td style="text-align: right;">0.071</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">0.159</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">treatmentSelf</td>
+<td style="text-align: right;">0.202</td>
+<td style="text-align: right;">0.118</td>
+<td style="text-align: right;">0.286</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">treatmentNeighbors</td>
+<td style="text-align: right;">0.359</td>
+<td style="text-align: right;">0.277</td>
+<td style="text-align: right;">0.440</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">voter_classSometimes Vote</td>
+<td style="text-align: right;">0.820</td>
+<td style="text-align: right;">0.780</td>
+<td style="text-align: right;">0.860</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">voter_classAlways Vote</td>
+<td style="text-align: right;">1.609</td>
+<td style="text-align: right;">1.567</td>
+<td style="text-align: right;">1.651</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">treatmentCivic Duty:voter_classSometimes Vote</td>
+<td style="text-align: right;">0.031</td>
+<td style="text-align: right;">-0.061</td>
+<td style="text-align: right;">0.124</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">treatmentHawthorne:voter_classSometimes Vote</td>
+<td style="text-align: right;">0.059</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">0.153</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">treatmentSelf:voter_classSometimes Vote</td>
+<td style="text-align: right;">0.053</td>
+<td style="text-align: right;">-0.036</td>
+<td style="text-align: right;">0.143</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">treatmentNeighbors:voter_classSometimes Vote</td>
+<td style="text-align: right;">0.041</td>
+<td style="text-align: right;">-0.046</td>
+<td style="text-align: right;">0.128</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">treatmentCivic Duty:voter_classAlways Vote</td>
+<td style="text-align: right;">-0.051</td>
+<td style="text-align: right;">-0.149</td>
+<td style="text-align: right;">0.048</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">treatmentHawthorne:voter_classAlways Vote</td>
+<td style="text-align: right;">0.063</td>
+<td style="text-align: right;">-0.037</td>
+<td style="text-align: right;">0.163</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">treatmentSelf:voter_classAlways Vote</td>
+<td style="text-align: right;">-0.006</td>
+<td style="text-align: right;">-0.101</td>
+<td style="text-align: right;">0.090</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">treatmentNeighbors:voter_classAlways Vote</td>
+<td style="text-align: right;">0.006</td>
+<td style="text-align: right;">-0.087</td>
+<td style="text-align: right;">0.100</td>
+</tr>
+</tbody>
+</table>
+<p>Estimated Coefficients from the Logistic Regression Model for Voter Turnout</p>
 
 </main>
 <!-- /main column -->

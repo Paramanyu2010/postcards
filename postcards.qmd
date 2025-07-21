@@ -12,10 +12,70 @@ library(tidyverse)
 library(primer.data)
 library(tidymodels)
 library(broom)
+library(marginaleffects) # Needed for plot_predictions later
+library(knitr)         # Needed for kable table
+library(ggplot2)  
 ```
 
-Understanding voter behavior is crucial for effective political engagement and democratic participation. This analysis utilizes data from Gerber, Green, and Larimer's (2008) large-scale field experiment to investigate the causal impact of different types of social pressure postcards on voter turnout in the 2006 primary election. Furthermore, the generalizability of these findings may be limited as the experimental data was collected in 2006, and voter behavior and the political landscape have likely evolved significantly since then, potentially violating the assumption of stability.
+Understanding voter behavior is crucial for effective political engagement and democratic participation. This analysis utilizes data from Gerber, Green, and Larimer's (2008) large-scale field experiment to investigate the causal impact of different types of social pressure postcards on voter turnout in the 2006 primary election. Furthermore, the generalizability of these findings may be limited as the experimental data was collected in 2006, and voter behavior and the political landscape have likely evolved significantly since then, potentially violating the assumption of stability. The estimates and their associated uncertainty might be incorrect due to potential issues with the stability of voter behavior over time (as the data is from 2006 Michigan), the representativeness of the original sample (limited to 2004 voters), and unobserved confounding or spillover effects inherent in real-world field experiments.
 
 $$P(Y = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n)}}$$
 
 with $Y \sim \text{Bernoulli}(\rho)$ where $\rho$ is the probability above.
+
+$$
+\log\left(\frac{P(\text{voted}=1)}{1-P(\text{voted}=1)}\right) = -2.434 \\
++ 0.012 \cdot \text{age} + 0.036 \cdot \text{sexMale} \\
++ 0.086 \cdot \text{treatmentCivic Duty} + 0.071 \cdot \text{treatmentHawthorne} \\
++ 0.202 \cdot \text{treatmentSelf} + 0.359 \cdot \text{treatmentNeighbors} \\
++ 0.820 \cdot \text{voter\_classSometimes Vote} + 1.609 \cdot \text{voter\_classAlways Vote} \\
++ 0.031 \cdot (\text{treatmentCivic Duty} \cdot \text{voter\_classSometimes Vote}) \\
++ 0.059 \cdot (\text{treatmentHawthorne} \cdot \text{voter\_classSometimes Vote}) \\
++ 0.053 \cdot (\text{treatmentSelf} \cdot \text{voter\_classSometimes Vote}) \\
++ 0.041 \cdot (\text{treatmentNeighbors} \cdot \text{voter\_classSometimes Vote}) \\
+- 0.051 \cdot (\text{treatmentCivic Duty} \cdot \text{voter\_classAlways Vote}) \\
++ 0.063 \cdot (\text{treatmentHawthorne} \cdot \text{voter\_classAlways Vote}) \\
+- 0.006 \cdot (\text{treatmentSelf} \cdot \text{voter\_classAlways Vote}) \\
++ 0.006 \cdot (\text{treatmentNeighbors} \cdot \text{voter\_classAlways Vote})
+$$
+
+```{r}
+#| message: false
+# Data preparation chunk for 'x'
+x <- shaming |>
+  mutate(civ_engage = primary_00 + primary_02 + primary_04 +
+               general_00 + general_02 + general_04) |>
+  select(primary_06, treatment, sex, age, civ_engage) |>
+  mutate(voter_class = factor(
+    case_when(
+      civ_engage %in% c(5, 6) ~ "Always Vote",
+      civ_engage %in% c(3, 4) ~ "Sometimes Vote",
+      civ_engage %in% c(1, 2) ~ "Rarely Vote"),
+         levels = c("Rarely Vote",
+                    "Sometimes Vote",
+                    "Always Vote"))) |>
+  mutate(voted = as.factor(primary_06)) # Ensure primary_06 is correctly converted to a factor, as the model uses 'voted'
+```
+
+```{r}
+#| cache: true
+fit_vote <- logistic_reg(engine = "glm") |>
+  fit(voted ~ age + sex + treatment * voter_class, data = x)
+```
+
+```{r}
+#| echo: false
+#| results: asis
+#| fig-cap: "Estimated Coefficients from the Logistic Regression Model for Voter Turnout"
+
+# Ensure knitr is loaded in your setup chunk at the top of the document
+# if you haven't already: library(knitr)
+
+tidy(fit_vote, conf.int = TRUE) |>
+  select(term, estimate, conf.low, conf.high) |>
+  knitr::kable(
+    digits = 3, # Use 3 digits for precision as shown in the example table
+    col.names = c("Variable", "Estimate (Log-Odds)", "Lower CI", "Upper CI"),
+    caption = "Estimated Effects from Voting Model (Source: 2006 Michigan primary voting results. Estimates are on the log-odds scale. Confidence intervals are 95%.)"
+  )
+```
