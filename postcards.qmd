@@ -10,6 +10,12 @@ execute:
 #| message: false
 library(tidyverse)
 library(primer.data)
+library(tidymodels)
+library(broom)
 ```
 
-Understanding voter behavior is crucial for effective political engagement and democratic participation. This analysis utilizes data from Gerber, Green, and Larimer's (2008) large-scale field experiment to investigate the causal impact of different types of social pressure postcards on voter turnout in the 2006 primary election.
+Understanding voter behavior is crucial for effective political engagement and democratic participation. This analysis utilizes data from Gerber, Green, and Larimer's (2008) large-scale field experiment to investigate the causal impact of different types of social pressure postcards on voter turnout in the 2006 primary election. Furthermore, the generalizability of these findings may be limited as the experimental data was collected in 2006, and voter behavior and the political landscape have likely evolved significantly since then, potentially violating the assumption of stability.
+
+$$P(Y = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n)}}$$
+
+with $Y \sim \text{Bernoulli}(\rho)$ where $\rho$ is the probability above.
